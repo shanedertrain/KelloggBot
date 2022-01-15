@@ -1,25 +1,23 @@
-import requests
-import functools
 import os
 import random
-import re
 import sys
 import time
 import argparse
-from selenium.webdriver.chrome import options
-
-from faker import Faker
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from resume_faker import make_resume
 from pdf2image import convert_from_path
 
 from webdriver_manager.chrome import ChromeDriverManager
 os.environ['WDM_LOG_LEVEL'] = '0'
+
+#custom stuff
+from configuration.configuration import printf
+import fake_identity as fid
+from resume_faker import make_resume
 
 from constants.common import *
 from constants.fileNames import *
@@ -32,31 +30,34 @@ from constants.urls import *
 from constants.xPaths import *
 from constants.areaCodes import *
 
+from constants.location import CITIES_TO_URLS
+
 os.environ["PATH"] += ":/usr/local/bin" # Adds /usr/local/bin to my path which is where my ffmpeg is stored
 
-fake = Faker()
-
-# Add printf: print with flush by default. This is for python 2 support.
-# https://stackoverflow.com/questions/230751/how-can-i-flush-the-output-of-the-print-function-unbuffer-python-output#:~:text=Changing%20the%20default%20in%20one%20module%20to%20flush%3DTrue
-printf = functools.partial(print, flush=True)
 
 #Option parsing
 parser = argparse.ArgumentParser(SCRIPT_DESCRIPTION,epilog=EPILOG)
-parser.add_argument('--debug',action='store_true',default=DEBUG_DISABLED,required=False,help=DEBUG_DESCRIPTION,dest='debug')
-parser.add_argument('--mailtm',action='store_true',default=MAILTM_DISABLED,required=False,help=MAILTM_DESCRIPTION,dest='mailtm')
+parser.add_argument('--debug',action='store_true',default=False,required=False,help=DEBUG_DESCRIPTION,dest='debug_enabled')
+parser.add_argument('--mailtm',action='store_true',default=False,required=False,help=MAILTM_DESCRIPTION,dest='using_mailtm')
+parser.add_argument('--no_warn_installs', action='store_false', default=True, dest='warn_installs')
+parser.add_argument('--exploiter', action='store', default='Kellogs', dest='exploiter')
 args = parser.parse_args()
 # END TEST
 
+import configuration.configuration as config
+config.warn_installs = args.warn_installs
+
 def start_driver(random_city):
     options = Options()
-    if (args.debug == DEBUG_DISABLED):
+    if args.debug_enabled:
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+    else:
         options.add_argument(f"user-agent={USER_AGENT}")
         options.add_argument('disable-blink-features=AutomationControlled')
         options.headless = True
         driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)
         driver.set_window_size(1440, 900)
-    elif (args.debug == DEBUG_ENABLED):
-        driver = webdriver.Chrome(ChromeDriverManager().install())
+
     driver.get(CITIES_TO_URLS[random_city])
     driver.implicitly_wait(10)
     time.sleep(15)
@@ -68,16 +69,15 @@ def start_driver(random_city):
 
 
 def generate_account(driver, fake_identity):
-    # make fake account info and fill
-
-    email = fake.free_email()
-    password = fake.password()
-
+    """
+        Generates account on the employer's website and verifies it with the emailed passcode 
+    """
+    email = fake_identity['email']
     for key in XPATHS_2.keys():
         if key in ('email', 'email-retype'):
-            info = fake_identity['email']
+            info = email
         elif key in ('pass', 'pass-retype'):
-            info = password
+            info = fake_identity['password']
         elif key == 'first_name':
             info = fake_identity['first_name']
         elif key == 'last_name':
@@ -102,33 +102,23 @@ def generate_account(driver, fake_identity):
     time.sleep(1.5)
     for i in range(120):
         time.sleep(1.5)
-        if (args.mailtm == MAILTM_DISABLED):
-            mail = requests.get(f'https://api.guerrillamail.com/ajax.php?f=check_email&seq=1&sid_token={fake_identity.get("sid")}').json().get('list')
-
-            if mail:
-                passcode = re.findall('(?<=n is ).*?(?=<)', requests.get(f'https://api.guerrillamail.com/ajax.php?f=fetch_email&email_id={mail[0].get("mail_id")}&sid_token={fake_identity.get("sid")}').json().get('mail_body'))[0]
-                break
-
-        elif (args.mailtm == MAILTM_ENABLED):
-            mail = requests.get("https://api.mail.tm/messages?page=1", headers={'Authorization':f'Bearer {fake_identity.get("sid")}'}).json().get('hydra:member')
-
-            if mail:
-                passcode = re.findall('(?<=n is ).*', requests.get(f'https://api.mail.tm{mail[0].get("@id")}', headers={'Authorization':f'Bearer {fake_identity.get("sid")}'}).json().get('text'))[0]
-                break
-    else:
+        passcode = fid.get_passcode_from_email()
+        if passcode:
+            break
+    else: #failed to get passcode
         args.mailtm ^= True
-        main() # I should probably find a better way to do this.
+        os.execv(sys.argv[0], sys.argv) #restart program with same command line args 
 
     driver.find_element_by_xpath(VERIFY_EMAIL_INPUT).send_keys(passcode)
     driver.find_element_by_xpath(VERIFY_EMAIL_BUTTON).click()
 
-    printf(f"successfully made account for fake email {email}")
+    printf(f"Success! Made {args.exploiter} account using email: {email}")
 
 
 def fill_out_application_and_submit(driver, random_city, fake_identity):
     # make resume
     resume_filename = fake_identity['last_name']+'-Resume'
-    make_resume(fake_identity['first_name']+' '+fake_identity['last_name'], fake_identity['email'], fake_identity['phone'], resume_filename)
+    make_resume(fake_identity['email'], resume_filename)
     images = convert_from_path(resume_filename+'.pdf')
     images[0].save(resume_filename+'.png', 'PNG')
 
@@ -145,13 +135,13 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
             driver.find_element_by_xpath(UPLOAD_A_RESUME_BUTTON).click()
             info = os.getcwd() + '/'+resume_filename+'.png'
         elif key == 'addy':
-            info = fake.street_address()
+            info = fake_identity['street_address']
         elif key == 'city':
             info = random_city
         elif key == 'zip':
             info = CITIES_TO_ZIP_CODES[random_city]
         elif key == 'job':
-            info = fake.job()
+            info = fake_identity['job']
         elif key == 'salary':
             first = random.randrange(15000, 30000, 5000)
             info = f'{format(first, ",")}-{format(random.randrange(first + 5000, 35000, 5000), ",")}'
@@ -197,42 +187,10 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
     os.remove(resume_filename+'.pdf')
     os.remove(resume_filename+'.png')
 
-def random_email(name=None):
-    if name is None:
-        name = fake.name()
-
-    mailGens = [lambda fn, ln, *names: fn + ln,
-                lambda fn, ln, *names: fn + "_" + ln,
-                lambda fn, ln, *names: fn[0] + "_" + ln,
-                lambda fn, ln, *names: fn + ln + str(int(1 / random.random() ** 3)),
-                lambda fn, ln, *names: fn + "_" + ln + str(int(1 / random.random() ** 3)),
-                lambda fn, ln, *names: fn[0] + "_" + ln + str(int(1 / random.random() ** 3)), ]
-
-    return random.choices(mailGens, MAIL_GENERATION_WEIGHTS)[0](*name.split(" ")).lower() + "@" + \
-           requests.get('https://api.mail.tm/domains').json().get('hydra:member')[0].get('domain')
-
-def random_phone(format=None):
-    area_code = str(random.choice(AREA_CODES))
-    middle_three = str(random.randint(0,999)).rjust(3,'0')
-    last_four = str(random.randint(0,9999)).rjust(4,'0')
-
-    if format is None:
-        format = random.randint(0,4)
-
-    if format==0:
-        return area_code+middle_three+last_four
-    elif format==1:
-        return area_code+' '+middle_three+' '+last_four
-    elif format==2:
-        return area_code+'.'+middle_three+'.'+last_four
-    elif format==3:
-        return area_code+'-'+middle_three+'-'+last_four
-    elif format==4:
-        return '('+area_code+') '+middle_three+'-'+last_four
-
 def main():
     while True:
         random_city = random.choice(list(CITIES_TO_URLS.keys()))
+        printf(f"Applying for job in {random_city}")
         try:
             driver = start_driver(random_city)
         except Exception as e:
@@ -240,31 +198,7 @@ def main():
             pass
 
         time.sleep(2)
-
-        fake_first_name = fake.first_name()
-        fake_last_name = fake.last_name()
-        fake_phone = random_phone()
-        if (args.mailtm == MAILTM_DISABLED):
-            printf(f"USING GUERRILLA TO CREATE EMAIL")
-            response = requests.get('https://api.guerrillamail.com/ajax.php?f=get_email_address').json()
-
-            fake_email = response.get('email_addr')
-            mail_sid = response.get('sid_token')
-            printf(f"EMAIL CREATED")
-
-        elif (args.mailtm == MAILTM_ENABLED):
-            printf(f"USING MAILTM TO CREATE EMAIL")
-            fake_email = requests.post('https://api.mail.tm/accounts', data='{"address":"'+random_email(fake_first_name+' '+fake_last_name)+'","password":" "}', headers={'Content-Type': 'application/json'}).json().get('address')
-            mail_sid = requests.post('https://api.mail.tm/token', data='{"address":"'+fake_email+'","password":" "}', headers={'Content-Type': 'application/json'}).json().get('token')
-            printf(f"EMAIL CREATED")
-
-        fake_identity = {
-            'first_name': fake_first_name,
-            'last_name': fake_last_name,
-            'email': fake_email,
-            'phone': fake_phone,
-            'sid' : mail_sid
-        }
+        fake_identity = fid.generate_fake_identity(USING_MAILTM=args.using_mailtm, verbose=args.debug_enabled)
 
         try:
             generate_account(driver, fake_identity)
