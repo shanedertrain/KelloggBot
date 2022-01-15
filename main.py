@@ -34,7 +34,6 @@ from constants.location import CITIES_TO_URLS
 
 os.environ["PATH"] += ":/usr/local/bin" # Adds /usr/local/bin to my path which is where my ffmpeg is stored
 
-
 #Option parsing
 parser = argparse.ArgumentParser(SCRIPT_DESCRIPTION,epilog=EPILOG)
 parser.add_argument('--debug',action='store_true',default=False,required=False,help=DEBUG_DESCRIPTION,dest='debug_enabled')
