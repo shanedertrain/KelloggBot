@@ -6,11 +6,12 @@ from faker import Faker
 from datetime import date
 
 #custom funcs 
-from configuration.configuration import printf
-
+from configuration import printf
 from constants.areaCodes import AREA_CODES
 from constants.email import MAIL_GENERATION_WEIGHTS
 from constants.education import UNIVERSITIES, DEGREES
+import resume_faker
+import pdf2image
 
 fake = Faker()
 
@@ -51,7 +52,7 @@ def random_phone(format=None):
     elif format==4:
         return '('+area_code+') '+middle_three+'-'+last_four
 
-def generate_fake_identity(USING_MAILTM, verbose=False):
+def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
     """
         Generates a fake identity with a usable email address. 
         If USING_MAILTM is false, function uses GuerillaMail
@@ -98,17 +99,28 @@ def generate_fake_identity(USING_MAILTM, verbose=False):
         'mid_year': mid_year,
     }
 
+    if generate_resume:
+        resume_filename = fake_identity['last_name']+'-Resume'
+        fake_identity['resume_pdf_filepath'] = resume_faker.make_resume(fake_identity, resume_filename, verbose)
+ 
+        images = pdf2image.convert_from_path(fake_identity['resume_pdf_filepath'])
+
+        fake_identity['resume_img_filepath'] = resume_filename+'.png'
+        images[0].save(fake_identity['resume_img_filepath'], 'PNG')
+
     if verbose:
         printf("     Fake Identity created:")
         printf(f"Name          : {fake_identity['first_name']} {['last_name']}")
-        printf(f"With a degree in {fake_identity['degree']} from {fake_identity['university']}")
-        printf(f"   graduated in {fake_identity['grad_year']} with mid-year in {fake_identity['mid_year']}")
+        printf(f"Education     : Degree in {fake_identity['degree']} from {fake_identity['university']}")
+        printf(f"                   graduated in {fake_identity['grad_year']} with mid-year in {fake_identity['mid_year']}")
         printf(f"Phone Number  : {fake_identity['phone']}")
         printf(f"Street Address: {fake_identity['street_address']}")
         printf(f"Job Title     : {fake_identity['job']}")
         printf(f"eMail         : {fake_identity['email']}")
         printf(f"eMail SID     : {fake_identity['email_sid']}")
         printf(f"Password      : {fake_identity['password']}")
+    
+    return fake_identity
 
 
 def get_passcode_from_email_accounts(USING_MAILTM, fake_identity):

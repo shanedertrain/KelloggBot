@@ -1,18 +1,20 @@
 import random
-from faker import Faker
 from datetime import date
 import re
 import os
 import subprocess
+from pathlib import Path
+from faker import Faker
 
 #custom
 from constants.education import UNIVERSITIES, DEGREES
+from configuration import OUTPUT_PATH, BASE_PATH
 
 fake = Faker()
 
-ROOT_FOLDER = './resumeSrc/'
-TEMPLATES_FOLDER = ROOT_FOLDER+'templates/'
-PACKAGES_FOLDER = ROOT_FOLDER+'packages/'
+ROOT_FOLDER = BASE_PATH / 'resumeSrc'
+TEMPLATES_FOLDER = ROOT_FOLDER / 'templates'
+PACKAGES_FOLDER = ROOT_FOLDER / 'packages'
     
 def make_resume(fake_identity=None, filename='resume', verbose=False):
     """
@@ -24,7 +26,8 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
             os.remove(PACKAGES_FOLDER+'auto_resume.'+ext)
         except Exception:
             continue
-            
+
+    year_today = date.today().year    
     if fake_identity:
         name = f"{fake_identity['first_name']} {fake_identity['last_name']}"
         email = fake_identity['email']
@@ -41,8 +44,6 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
 
         university = random.choice(UNIVERSITIES)
         degree = random.choice(DEGREES)
-        
-        year_today = date.today().year
         grad_year = random.randrange(1990,year_today-10)
         mid_year = int(grad_year + (year_today-grad_year)*0.1*random.randrange(3,7))
 
@@ -50,7 +51,7 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
     template = 'developercv.tex' # for testing
     #template = random.choice([file for file in os.listdir(TEMPLATES_FOLDER) if file.endswith('.tex')])
 
-    with open(TEMPLATES_FOLDER+template) as input, open(PACKAGES_FOLDER+'auto_resume.tex', 'a') as output:
+    with open(TEMPLATES_FOLDER / template) as input, open(PACKAGES_FOLDER / 'auto_resume.tex', 'a') as output:
         for line in input.readlines():
             line = re.sub('@@WORDS@@', fake.sentence(6)[:-1], line)
             line = re.sub('@@PARAGRAPH@@', fake.paragraph(6), line)
@@ -84,9 +85,16 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
         stderr = subprocess.DEVNULL if verbose else None, 
         stdout = subprocess.DEVNULL if verbose else None
     )
-    os.rename(PACKAGES_FOLDER+'auto_resume.pdf','./'+filename+'.pdf')
+
+    output_filepath = OUTPUT_PATH / f'{filename}.pdf'
+
+    os.rename(PACKAGES_FOLDER / 'auto_resume.pdf', output_filepath)
     for ext in ['tex','aux','log','out']:
         try:
-            os.remove(PACKAGES_FOLDER+'auto_resume.'+ext)
+            os.remove(PACKAGES_FOLDER / 'auto_resume.'+ext)
         except Exception:
             continue
+
+    return output_filepath
+
+    
