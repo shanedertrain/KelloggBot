@@ -6,7 +6,7 @@ from faker import Faker
 from datetime import date
 
 #custom funcs 
-from configuration import printf
+from configuration import printf, OUTPUT_PATH
 from constants.areaCodes import AREA_CODES
 from constants.email import MAIL_GENERATION_WEIGHTS
 from constants.education import UNIVERSITIES, DEGREES
@@ -105,7 +105,7 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
  
         images = pdf2image.convert_from_path(fake_identity['resume_pdf_filepath'])
 
-        fake_identity['resume_img_filepath'] = resume_filename+'.png'
+        fake_identity['resume_img_filepath'] = OUTPUT_PATH / resume_filename+'.png'
         images[0].save(fake_identity['resume_img_filepath'], 'PNG')
 
     if verbose:
