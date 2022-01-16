@@ -15,3 +15,5 @@ captcha_audio.*
 *.png
 *.html
 data/
+*.log
+*.tex
