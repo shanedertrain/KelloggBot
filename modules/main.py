@@ -86,6 +86,9 @@ def main():
             time.sleep(5)
     except KeyboardInterrupt:
         printf("Exited via keyboard")
+    finally:
+        os.remove(fake_identity['resume_img_filepath'])
+        os.remove(fake_identity['resume_pdf_filepath'])
 
 
 if __name__ == '__main__':

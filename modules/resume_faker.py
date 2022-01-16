@@ -8,11 +8,11 @@ from faker import Faker
 
 #custom
 from constants.education import UNIVERSITIES, DEGREES
-from configuration import OUTPUT_PATH, BASE_PATH
+from configuration import OUTPUT_PATH, MODULES_PATH
 
 fake = Faker()
 
-ROOT_FOLDER = BASE_PATH / 'resumeSrc'
+ROOT_FOLDER = MODULES_PATH / 'resumeSrc'
 TEMPLATES_FOLDER = ROOT_FOLDER / 'templates'
 PACKAGES_FOLDER = ROOT_FOLDER / 'packages'
     

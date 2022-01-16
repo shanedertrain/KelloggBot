@@ -100,12 +100,12 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
     }
 
     if generate_resume:
-        resume_filename = fake_identity['last_name']+'-Resume'
+        resume_filename = f"{fake_identity['first_name']} {fake_identity['last_name']}-Resume"
         fake_identity['resume_pdf_filepath'] = resume_faker.make_resume(fake_identity, resume_filename, verbose)
  
         images = pdf2image.convert_from_path(fake_identity['resume_pdf_filepath'])
 
-        fake_identity['resume_img_filepath'] = OUTPUT_PATH / resume_filename+'.png'
+        fake_identity['resume_img_filepath'] = OUTPUT_PATH / f'{resume_filename}.png'
         images[0].save(fake_identity['resume_img_filepath'], 'PNG')
 
     if verbose:

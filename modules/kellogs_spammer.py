@@ -147,5 +147,4 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
     printf(f"successfully submitted application")
 
     # take out the trash
-    os.remove(fake_identity['resume_img_filepath'])
-    os.remove(fake_identity['resume_pdf_filepath'])
+    

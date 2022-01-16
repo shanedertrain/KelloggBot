@@ -15,10 +15,14 @@ printf = functools.partial(print, flush=True)
 
 warn_installs = True #controls warnings for things not installed. can be disabled because it may be buggy. 
 
-BASE_PATH = Path(__file__).parent.resolve()
+MODULES_PATH = Path(__file__).parent.resolve()
+BASE_PATH = MODULES_PATH.parent 
+
 DATA_PATH = BASE_PATH / 'data'
 INPUT_PATH = DATA_PATH / 'input'
 OUTPUT_PATH = DATA_PATH /'output'
+
+print(BASE_PATH)
 
 def mkdir_if_not_exists(dir):
     if not Path.exists(dir):
