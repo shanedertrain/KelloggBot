@@ -2,8 +2,6 @@ import time
 import random
 import os
 import sys
-import re
-import requests
 
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
@@ -14,9 +12,9 @@ from selenium.webdriver.common.keys import Keys
 from configuration import printf
 import fake_identity as fid
 
-from constants import elementids_kellogs as element_id
-from constants import xpaths_kellogs as xpaths
-from constants import location_kellogs as location
+from constants.kellogs import elementids_kellogs as element_id
+from constants.kellogs import xpaths_kellogs as xpaths
+from constants.kellogs import location_kellogs as location
 from constants import common 
 
 
