@@ -69,7 +69,7 @@ def main():
                                                     generate_resume=True, verbose=args.debug_enabled)
                 
                 if exploiter == 'kellogs':
-                    random_city = kellogs_spammer.generate_account(driver, fake_identity)
+                    random_city = kellogs_spammer.generate_account(driver, fake_identity, USING_MAILTM=args.using_mailtm)
 
             except Exception as e:
                 if args.debug_enabled: traceback.print_exc()

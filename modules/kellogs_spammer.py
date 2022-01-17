@@ -2,6 +2,8 @@ import time
 import random
 import os
 import sys
+import re
+import requests
 
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
@@ -28,7 +30,7 @@ def navigate_to_kellogs_create_account_page(driver, random_city):
     driver.find_element_by_xpath(xpaths.CREATE_AN_ACCOUNT_BUTTON).click()
 
 
-def generate_account(driver, fake_identity):
+def generate_account(driver, fake_identity, using_mailtm):
     """
         Generates account on the Kellogs website and verifies it with the emailed passcode 
     """
@@ -69,7 +71,7 @@ def generate_account(driver, fake_identity):
     time.sleep(1.5)
     for i in range(120):
         time.sleep(1.5)
-        passcode = fid.get_passcode_from_email(fake_identity)
+        passcode = fid.get_passcode_from_email(using_mailtm, fake_identity)
         if passcode:
             break
     else: #failed to get passcode
@@ -82,6 +84,7 @@ def generate_account(driver, fake_identity):
     printf(f"Success! Made Kellogs account using email: {email}")
 
     return random_city
+
 
 
 def fill_out_application_and_submit(driver, random_city, fake_identity):
