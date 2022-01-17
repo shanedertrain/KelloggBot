@@ -122,8 +122,7 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
     
     return fake_identity
 
-
-def get_passcode_from_email_accounts(USING_MAILTM, fake_identity):
+def get_passcode_from_email(USING_MAILTM, fake_identity):
     if USING_MAILTM:
         mail = requests.get("https://api.mail.tm/messages?page=1", headers={'Authorization':f'Bearer {fake_identity.get("sid")}'}).json().get('hydra:member')
 
@@ -137,6 +136,7 @@ def get_passcode_from_email_accounts(USING_MAILTM, fake_identity):
         if mail:
             passcode = re.findall('(?<=n is ).*?(?=<)', requests.get(f'https://api.guerrillamail.com/ajax.php?f=fetch_email&email_id={mail[0].get("mail_id")}&sid_token={fake_identity.get("sid")}').json().get('mail_body'))[0]
             return passcode
+
 
 if __name__ == '__main__':
     generate_fake_identity(USING_MAILTM=False, verbose=True)
