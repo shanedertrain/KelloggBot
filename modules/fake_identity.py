@@ -10,6 +10,7 @@ from configuration import printf, OUTPUT_PATH
 from constants.areaCodes import AREA_CODES
 from constants.email import MAIL_GENERATION_WEIGHTS
 from constants.education import UNIVERSITIES, DEGREES
+from constants.geography import abbrev_to_us_state
 import resume_faker
 import pdf2image
 
@@ -60,9 +61,18 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
     fake_first_name = fake.first_name()
     fake_last_name = fake.last_name()
     fake_phone = random_phone()
-    fake_address = fake.street_address()
     fake_job = fake.job()
     fake_password = fake.password()
+
+    #get address info
+    fake_address = fake.address()
+    fake_address_split = fake_address.split('\n')
+    street_address = fake_address_split[0]
+    address_latter = fake_address_split[1].split(',')
+    city = address_latter[0]
+    state_abbrv = address_latter[1].split(' ')[1]
+    state_full = abbrev_to_us_state[state_abbrv]
+    zip_code = address_latter[1].split(' ')[2]
 
     university = random.choice(UNIVERSITIES)
     degree = random.choice(DEGREES)
@@ -90,8 +100,12 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
         'email': fake_email,
         'phone': fake_phone,
         'email_sid' : mail_sid,
-        'street_address': fake_address,
-        'job': fake_job,
+        'street_address': street_address,
+        'state_abbrv':state_abbrv,
+        'state_full': state_full,
+        'city': city,
+        'zip_code': zip_code,
+        'job_0': fake_job,
         'password': fake_password,
         'university': university,
         'degree': degree,
@@ -101,7 +115,7 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
 
     if generate_resume:
         resume_filename = f"{fake_identity['first_name']} {fake_identity['last_name']}-Resume"
-        fake_identity['resume_pdf_filepath'] = resume_faker.make_resume(fake_identity, resume_filename, verbose)
+        fake_identity = resume_faker.make_resume(fake_identity, resume_filename, verbose)
  
         images = pdf2image.convert_from_path(fake_identity['resume_pdf_filepath'])
 
