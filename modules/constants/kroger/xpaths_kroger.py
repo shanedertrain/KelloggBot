@@ -21,13 +21,25 @@ CREATE_AN_ACCOUNT_BUTTON = '//*[@id="page_content"]/div[2]/div/div/div[2]/div/di
 
 #xpaths for the actual application
 XPATHS_1 = {
-    'resume': '//*[@id="49:_file"]',
-    'addy': '//*[@id="106:_txtFld"]',
-    'city': '//*[@id="122:_txtFld"]',
-    'state': '//*[@id="118:_select"]',
-    'zip': '//*[@id="126:_txtFld"]',
-    'country': '//*[@id="195:_select"]',
-    'phone_number': '//*[@id="75:_txtFld"]'
+    'resume': '//*[@id="49:_file"]',  #required
+    'legal_first_name': '//*[@id="63:_txtFld"]',  #required
+    'legal_middle_name': '//*[@id="67:_txtFld"]',  #required
+    'legal_last_name': '//*[@id="71:_txtFld"]',
+    'phone_number': '//*[@id="75:_txtFld"]',
+    'phone_country': '//*[@id="80:_select"]',
+    'opt_in_sms': '//*[@id="84:"]',
+    'email': '//*[@id="90:_txtFld"]',
+    'suffix': '//*[@id="94:_select"]',
+    'first_name_preferred': '//*[@id="98:_txtFld"]',
+    'other_names': '//*[@id="102:_txtFld"]',
+    'addy1': '//*[@id="106:_txtFld"]', #required
+    'addy2': '//*[@id="110:_txtFld"]', 
+    'country': '//*[@id="114:_select"]', #required
+    'state': '//*[@id="118:_select"]',  #required
+    'city': '//*[@id="122:_txtFld"]', #required
+    'zip': '//*[@id="126:_txtFld"]', #required
+    'alt_phone': '//*[@id="130:_txtFld"]'
+
 }
 
 XPATHS_WORK_HISTORY = {
@@ -36,12 +48,12 @@ XPATHS_WORK_HISTORY = {
     'salary': '//*[@id="172:_txtFld"]',
     'company_name': '//*[@id="155:_txtFld"]',
     'company_state': '//*[@id="167:_select"]',
-    'company telephone' : '//*[@id="179:_txtFld"]',
+    'company_telephone' : '//*[@id="179:_txtFld"]',
     'employment_type' : '//*[@id="191:_select"]',
     'type_of_company' : '//*[@id="159:_select"]',
     'company_city' : '//*[@id="171:_txtFld"]',
     'position_title' : '//*[@id="183:_txtFld"]',
-    'reason_for_leading' : '//*[@id="195:_select"]',
+    'reason_for_leaving' : '//*[@id="195:_select"]',
     'may_we_contact' : '//*[@id="207:_select"]',
     'company_country':'//*[@id="163:_select"]',
     'company_postal_code':'//*[@id="175:_txtFld"]',
