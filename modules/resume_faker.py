@@ -37,10 +37,12 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
         degree = fake_identity['degree']
         grad_year = fake_identity['grad_year']
         mid_year = fake_identity['mid_year']
+        city = fake_identity['city']
     else:
         name = fake.name()
         email = fake.free_email() 
         phone = fake.phone_number()
+        city = fake.city()
 
         university = random.choice(UNIVERSITIES)
         degree = random.choice(DEGREES)
@@ -52,7 +54,10 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
     #template = random.choice([file for file in os.listdir(TEMPLATES_FOLDER) if file.endswith('.tex')])
 
     with open(TEMPLATES_FOLDER / template) as input, open(PACKAGES_FOLDER / 'auto_resume.tex', 'a') as output:
-        for line in input.readlines():
+        for idx, line in enumerate(input.readlines()):
+            fake_job = fake.job()
+            fake_company = fake.company()
+
             line = re.sub('@@WORDS@@', fake.sentence(6)[:-1], line)
             line = re.sub('@@PARAGRAPH@@', fake.paragraph(6), line)
             line = re.sub('@@BS@@', fake.bs(), line)
@@ -63,7 +68,7 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
 
             line = re.sub('@@PHONE@@', phone, line)
             line = re.sub('@@EMAIL@@', email, line)
-            line = re.sub('@@CITY@@', fake.city(), line)
+            line = re.sub('@@CITY@@', city, line)
 
             line = re.sub('@@UNIVERSITY@@', university, line)
             line = re.sub('@@DEGREE@@', degree, line)
@@ -74,10 +79,14 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
             line = re.sub('@@THISYEAR@@', random.choice([str(year_today), 'Present']), line)
             line = re.sub('@@MIDDLEYEAR@@', str(mid_year), line)
             
-            line = re.sub('@@JOB@@', fake.job(), line)
-            line = re.sub('@@COMPANY@@', fake.company(), line)
+            line = re.sub('@@JOB@@', fake_job, line)
+            line = re.sub('@@COMPANY@@', fake_company, line)
 
             output.write(line)
+
+            fake_identity[f'job_{idx}'] = fake_job
+            fake_identity[f'company_{idx}'] = fake_company
+            
 
     subprocess.call(
         ['pdflatex','auto_resume.tex'], 
@@ -94,7 +103,9 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
             os.remove(PACKAGES_FOLDER / 'auto_resume.'+ext)
         except Exception:
             continue
+    
+    fake_identity['resume_pdf_filepath'] = output_filepath
 
-    return output_filepath
+    return fake_identity
 
     
