@@ -110,7 +110,7 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
 
     if verbose:
         printf("     Fake Identity created:")
-        printf(f"Name          : {fake_identity['first_name']} {['last_name']}")
+        printf(f"Name          : {fake_identity['first_name']} {fake_identity['last_name']}")
         printf(f"Education     : Degree in {fake_identity['degree']} from {fake_identity['university']}")
         printf(f"                   graduated in {fake_identity['grad_year']} with mid-year in {fake_identity['mid_year']}")
         printf(f"Phone Number  : {fake_identity['phone']}")
