@@ -83,25 +83,38 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
     printf("Sleeping for 1200 seconds")
     time.sleep(1200)
 
-    for key in xpaths.XPATHS_1.keys():
-        if key == 'resume':
-            driver.find_element_by_xpath(xpaths.UPLOAD_A_RESUME_BUTTON).click()
-            time.sleep(random.randint(0, 2))
-            driver.find_element_by_xpath(xpaths.UPLOAD_FROM_DEVICE_BUTTON).click()
-            time.sleep(random.randint(0, 2))
-            info = os.getcwd() + '/'+fake_identity['resume_img_filepath']
-        elif key == 'addy':
-            info = fake_identity['street_address']
-        elif key == 'city':
-            info = random_city
-        elif key == 'zip':
-            info = location.CITIES_TO_ZIP_CODES[random_city]
-        elif key == 'state':
-            info = location.CITIES_TO_STATES[random_city]
-        elif key == 'phone_number':
+    #resume 
+    driver.find_element_by_xpath(xpaths.UPLOAD_A_RESUME_BUTTON).click()
+    time.sleep(random.randint(0, 2))
+    driver.find_element_by_xpath(xpaths.UPLOAD_FROM_DEVICE_BUTTON).click()
+    time.sleep(random.randint(0, 2))
+    print(os.getcwd() + '/'+fake_identity['resume_img_filepath'])
+    time.sleep(random.randint(2, 5))
+    
+    #profile info
+    for key in xpaths.XPATHS_PROFILE_INFO.keys():
+        if key == 'legal_first_name':
+            info = fake_identity['first_name']
+        elif key == 'legal_last_name':
+            info = fake_identity['last_name']
+        elif key == 'phone':
             info = fake_identity['phone']
-
-        driver.find_element_by_xpath(xpaths.XPATHS_1.get(key)).send_keys(info)
+        elif key == 'phone_country':
+            info = 'United States'
+        elif key == 'email':
+            info = fake_identity['email']
+        elif key == 'addy1':
+            info = fake_identity['street_address']
+        elif key == 'country':
+            info = 'United States'
+        elif key == 'state':
+            info = 'Colorado' #hardcode bad >:c but this shit is all xpaths I guess
+        elif key == 'city':
+            info = fake_identity['city']
+        elif key == 'zip':
+            info = fake_identity['zip_code']
+        
+        driver.find_element_by_xpath(xpaths.XPATHS_PROFILE_INFO.get(key)).send_keys(info)
     
     """
         elif key == 'job':
@@ -112,7 +125,44 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
     """
     #work history #TODO Fill this out 
     for key in xpaths.XPATHS_WORK_HISTORY:
-        pass
+        if key == 'employer_type':
+            info = ''
+        elif key == 'job':
+            info = ''
+        elif key == 'salary':
+            info = ''
+        elif key == 'company_name':
+            info = ''
+        elif key == 'company_state':
+            info = ''
+        elif key == 'company_telephone':
+            info = ''
+        elif key == 'employment_type':
+            info = ''
+        elif key == 'type_of_company':
+            info = ''
+        elif key == 'company_city':
+            info = ''
+        elif key == 'position_title':
+            info = ''
+        elif key == 'reason_for_leaving':
+            info = ''
+        elif key == 'may_we_contact':
+            info = ''
+        elif key == 'company_country':
+            info = ''
+        elif key == 'company_postal_code':
+            info = ''
+        elif key == 'position_type':
+            info = ''
+        elif key == 'reason_for_leading':
+            info = ''
+        elif key == 'from_date':
+            info = ''
+        elif key == 'end_date':
+            info = ''
+
+        driver.find_element_by_xpath(xpaths.XPATHS_PROFILE_INFO.get(key)).send_keys(info)
         
     #education 
     if False:
@@ -137,12 +187,12 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
             elif key == 'area_of_study':
                 info = fake_identity['phone']
 
-            driver.find_element_by_xpath(xpaths.XPATHS_1.get(key)).send_keys(info)
+            driver.find_element_by_xpath(xpaths.XPATHS_PROFILE_INFO.get(key)).send_keys(info)
     else:
         driver.find_element_by_xpath(xpaths.XPATHS_EDUCATION['education_type']).send_keys('High School Diploma')
 
     #job specific information #TODO Fill this out 
-    for key in xpaths.XPATHS_1.keys():
+    for key in xpaths.XPATHS_PROFILE_INFO.keys():
         if key == 'resume':
             driver.find_element_by_xpath(xpaths.UPLOAD_A_RESUME_BUTTON).click()
             time.sleep(random.randint(0, 2))
@@ -160,7 +210,7 @@ def fill_out_application_and_submit(driver, random_city, fake_identity):
         elif key == 'phone_number':
             info = fake_identity['phone']
 
-        driver.find_element_by_xpath(xpaths.XPATHS_1.get(key)).send_keys(info)
+        driver.find_element_by_xpath(xpaths.XPATHS_PROFILE_INFO.get(key)).send_keys(info)
     #availability #TODO Fill this out 
     #previous employment info #TODO Fill this out 
     #personal background info #TODO Fill this out 
