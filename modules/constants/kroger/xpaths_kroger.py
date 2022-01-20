@@ -1,4 +1,25 @@
-#xpaths for application
+#Xpaths for create account screen
+XPATHS_2 = {
+    'email': '//*[@id="fbclc_userName"]',
+    'email-retype': '//*[@id="fbclc_emailConf"]',
+    'pass': '//*[@id="fbclc_pwd"]',
+    'pass-retype': '//*[@id="fbclc_pwdConf"]',
+    'first_name': '//*[@id="fbclc_fName"]',
+    'last_name': '//*[@id="fbclc_lName"]',
+    'country': '//*[@id="fbclc_country"]', 
+}
+CREATE_ACCOUNT_BUTTON = '//*[@id="fbclc_createAccountButton"]'
+READ_TERMS_BUTTON = '//*[@id="dataPrivacyId"]'
+ACCEPT_TERMS_BUTTON = '//*[@id="dlgButton_20:"]'
+
+XPATHS_LOGIN = {
+    'email' : '//*[@id="username"]',
+    'password': '//*[@id="password"]',
+    'sign_in' : '//*[@id="page_content"]/div[2]/div/div/div[2]/div/div/table/tbody/tr[3]/td[2]/span[1]/span/button'
+}
+CREATE_AN_ACCOUNT_BUTTON = '//*[@id="page_content"]/div[2]/div/div/div[2]/div/div/div[2]/a'
+
+#xpaths for the actual application
 XPATHS_1 = {
     'resume': '//*[@id="49:_file"]',
     'addy': '//*[@id="106:_txtFld"]',
@@ -10,9 +31,24 @@ XPATHS_1 = {
 }
 
 XPATHS_WORK_HISTORY = {
-    'employer': '//*[@id="139:_select"]',
+    'employer_type': '//*[@id="139:_select"]',
     'job': '//*[@id="101:_txtFld"]',
     'salary': '//*[@id="172:_txtFld"]',
+    'company_name': '//*[@id="155:_txtFld"]',
+    'company_state': '//*[@id="167:_select"]',
+    'company telephone' : '//*[@id="179:_txtFld"]',
+    'employment_type' : '//*[@id="191:_select"]',
+    'type_of_company' : '//*[@id="159:_select"]',
+    'company_city' : '//*[@id="171:_txtFld"]',
+    'position_title' : '//*[@id="183:_txtFld"]',
+    'reason_for_leading' : '//*[@id="195:_select"]',
+    'may_we_contact' : '//*[@id="207:_select"]',
+    'company_country':'//*[@id="163:_select"]',
+    'company_postal_code':'//*[@id="175:_txtFld"]',
+    'position_type':'//*[@id="187:_select"]',
+    'reason_for_leading':'//*[@id="199:_txtFld"]',
+    'from_date':'//*[@id="143:_write"]',
+    'end_date':'//*[@id="149:_write"]'
 }
 
 XPATHS_EDUCATION = {
@@ -76,29 +112,6 @@ XPATHS_JOB_SPECIFIC ={
     'overnight_no': '//*[@id="249:_anchorButton"]'
 }
 
-#Xpaths for create account screen
-XPATHS_2 = {
-    'email': '//*[@id="fbclc_userName"]',
-    'email-retype': '//*[@id="fbclc_emailConf"]',
-    'pass': '//*[@id="fbclc_pwd"]',
-    'pass-retype': '//*[@id="fbclc_pwdConf"]',
-    'first_name': '//*[@id="fbclc_fName"]',
-    'last_name': '//*[@id="fbclc_lName"]',
-    'country': '//*[@id="fbclc_country"]', 
-}
-CREATE_ACCOUNT_BUTTON = '//*[@id="fbclc_createAccountButton"]'
-READ_TERMS_BUTTON = '//*[@id="dataPrivacyId"]'
-ACCEPT_TERMS_BUTTON = '//*[@id="dlgButton_20:"]'
-
-XPATHS_LOGIN = {
-    'email' : '//*[@id="username"]',
-    'password': '//*[@id="password"]',
-    'sign_in' : '//*[@id="page_content"]/div[2]/div/div/div[2]/div/div/table/tbody/tr[3]/td[2]/span[1]/span/button'
-}
-
-CREATE_AN_ACCOUNT_BUTTON = '//*[@id="page_content"]/div[2]/div/div/div[2]/div/div/div[2]/a'
-
-#resume app
 MY_DOCUMENTS_DROPDOWN = '//*[@id="51:topBar"]'
 UPLOAD_A_RESUME_BUTTON = '//*[@id="52:_attachLabel"]'
 UPLOAD_FROM_DEVICE_BUTTON = '//*[@id="53:_file"]'
@@ -114,7 +127,6 @@ READ_ACCEPT_DATA_PRIVACY_STATEMENT_ANCHORTAG = '//*[@id="dataPrivacyId"]'
 ACCEPT_BUTTON = '//*[@id="dlgButton_20:"]'
 VERIFY_EMAIL_INPUT = '//*[@id="passcode"]'
 VERIFY_EMAIL_BUTTON = '//*[@id="continueBtn"]'
-CANDIDATE_SPECIFIC_INFORMATION_DROPDOWN = '//*[@id="260:topBar"]'
 MIXER_QUESTION_1_LABEL = '//label[text()="350 LBS"]'
 MIXER_QUESTION_2_LABEL = '//label[text()="800 LBS"]'
 LONG_PERIODS_QUESTION_LABEL = '//label[text()="Yes"]'
