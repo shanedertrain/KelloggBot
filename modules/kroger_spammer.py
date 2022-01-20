@@ -67,29 +67,21 @@ def generate_account(driver, fake_identity, using_mailtm):
 
 
 def fill_out_application_and_submit(driver, random_city, fake_identity):
-    driver.get(location.CITIES_TO_URLS[random_city])
+    driver.get(random.choice(location.CITIES_TO_URLS[random_city]))
     
     # wait for page to load
     driver.implicitly_wait(10)
     time.sleep(10)
 
-    time.sleep(random.randint(0, 2))
-    driver.find_element_by_xpath(xpaths.XPATHS_LOGIN['email']).send_keys(fake_identity['email'])
-    time.sleep(random.randint(0, 2))
-    driver.find_element_by_xpath(xpaths.XPATHS_LOGIN['password']).send_keys(fake_identity['password'])
-    time.sleep(random.randint(0, 2))
-    driver.find_element_by_xpath(xpaths.XPATHS_LOGIN['sign_in']).click()
-
-    time.sleep(1200)
-
     # open all dropdowns
     driver.find_element_by_xpath(xpaths.MY_DOCUMENTS_DROPDOWN).click()
     driver.find_element_by_xpath(xpaths.PROFILE_INFORMATION_DROPDOWN).click()
-    driver.find_element_by_xpath(xpaths.CANDIDATE_SPECIFIC_INFORMATION_DROPDOWN).click()
     driver.find_element_by_xpath(xpaths.WORK_HISTORY_DROPDOWN).click()
     driver.find_element_by_xpath(xpaths.EDUCATION_EXPERIENCE_DROPDOWN).click()
     driver.find_element_by_xpath(xpaths.JOB_SPECIFIC_INFO_DROPDOWN).click()
-
+    
+    printf("Sleeping for 1200 seconds")
+    time.sleep(1200)
 
     for key in xpaths.XPATHS_1.keys():
         if key == 'resume':
