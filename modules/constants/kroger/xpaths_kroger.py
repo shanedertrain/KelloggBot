@@ -20,7 +20,7 @@ XPATHS_LOGIN = {
 CREATE_AN_ACCOUNT_BUTTON = '//*[@id="page_content"]/div[2]/div/div/div[2]/div/div/div[2]/a'
 
 #xpaths for the actual application
-XPATHS_1 = {
+XPATHS_PROFILE_INFO = {
     'resume': '//*[@id="49:_file"]',  #required
     'legal_first_name': '//*[@id="63:_txtFld"]',  #required
     'legal_middle_name': '//*[@id="67:_txtFld"]',  #required
