@@ -83,7 +83,7 @@ def fill_out_application_and_submit(driver, random_city, fake_identity, upload_r
     #driver.find_element_by_xpath(xpaths.MY_DOCUMENTS_DROPDOWN).click()
 
     #resume 
-    if upload_resume:
+    if upload_resume: #TODO: Make it so this doesnt need to pop up a window
         driver.find_element_by_xpath(xpaths.UPLOAD_A_RESUME_BUTTON).click()
         time.sleep(random.randint(0, 2))
         driver.find_element_by_xpath(xpaths.UPLOAD_FROM_DEVICE_BUTTON).click()
