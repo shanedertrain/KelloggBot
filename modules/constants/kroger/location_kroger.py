@@ -25,7 +25,7 @@ CITIES_TO_ZIP_CODES = {
 CITIES_TO_URLS = {
     'Aurora': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1981576'],
     'Broomfield': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1981622'],
-    'Boulder': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1948438'],
+    'Boulder': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1981576'],
     'Denver': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1981675'],
     'Thornton': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1981649'],
     'Westminster': ['https://career8.successfactors.com/career?company=Kroger&career_ns=job_application&src=Eightfold&career_job_req_id=1981608'],

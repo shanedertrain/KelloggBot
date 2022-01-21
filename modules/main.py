@@ -56,14 +56,14 @@ def main():
     exploiter = str(args.exploiter.lower()) #wrapped in string for linter
 
     try:
-        driver = start_driver()
-        atexit.register(driver.close)
-    except Exception as e:
-        if args.debug_enabled: traceback.print_exc()
-        raise Exception(f"FAILED TO START DRIVER: {e}")
-        
-    try:
         while True: 
+            try:
+                driver = start_driver()
+                atexit.register(driver.close)
+            except Exception as e:
+                if args.debug_enabled: traceback.print_exc()
+                printf(f"FAILED TO START DRIVER: {e}")
+
             try:
                 fake_identity = fid.generate_fake_identity(USING_MAILTM=args.using_mailtm, 
                                                     generate_resume=True, verbose=args.debug_enabled)
@@ -71,28 +71,29 @@ def main():
                 if exploiter == 'kellogs':
                     random_city = kellogs_spammer.generate_account(driver, fake_identity, using_mailtm=args.using_mailtm)
                 elif exploiter =='kroger':
-                    random_city = kroger_spammer.generate_account(driver, fake_identity, using_mailtm=args.using_mailtm)
+                    #fake_identity['email'] = f"{fake_identity['email'].split('@')[0]}@{random.choice(['gmail.com', 'outlook.com'])}"
+                    random_city = kroger_spammer.generate_account(driver, fake_identity)
 
             except Exception as e: 
                 if args.debug_enabled: traceback.print_exc()
-                raise Exception(f"FAILED TO CREATE ACCOUNT: {e}")
+                printf(f"FAILED TO CREATE ACCOUNT: {e}")
 
             try:
                 if exploiter == 'kellogs':
                     kellogs_spammer.fill_out_application_and_submit(driver, random_city, fake_identity)
                 elif exploiter =='kroger':
-                    kroger_spammer.fill_out_application_and_submit(driver, random_city, fake_identity)
+                    kroger_spammer.fill_out_application_and_submit(driver, random_city, fake_identity, upload_resume=random.choice([False, True]),verbose=args.debug_enabled)
                     
             except Exception as e:
                 if args.debug_enabled: traceback.print_exc()
-                raise Exception(f"FAILED TO FILL OUT APPLICATION AND SUBMIT: {e}")
+                printf(f"FAILED TO FILL OUT APPLICATION AND SUBMIT: {e}")
 
             time.sleep(5)
+            driver.close()
+            os.remove(fake_identity['resume_img_filepath'])
+            os.remove(fake_identity['resume_pdf_filepath'])
     except KeyboardInterrupt:
         printf("Exited via keyboard")
-    finally:
-        os.remove(fake_identity['resume_img_filepath'])
-        os.remove(fake_identity['resume_pdf_filepath'])
 
 
 if __name__ == '__main__':

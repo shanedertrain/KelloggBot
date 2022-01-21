@@ -1,2 +1,2 @@
-py -3 main.py --debug 
+py -3 main.py --debug
 pause

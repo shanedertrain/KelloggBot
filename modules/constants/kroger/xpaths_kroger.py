@@ -38,8 +38,8 @@ XPATHS_PROFILE_INFO = {
     'state': '//*[@id="118:_select"]',  #required
     'city': '//*[@id="122:_txtFld"]', #required
     'zip': '//*[@id="126:_txtFld"]', #required
-    'alt_phone': '//*[@id="130:_txtFld"]'
-
+    'alt_phone': '//*[@id="130:_txtFld"]',
+    'add_button': '//*[@id="136:_addRowBtn"]'
 }
 
 XPATHS_WORK_HISTORY = {
@@ -47,30 +47,30 @@ XPATHS_WORK_HISTORY = {
     'job': '//*[@id="101:_txtFld"]',
     'salary': '//*[@id="172:_txtFld"]',
     'company_name': '//*[@id="155:_txtFld"]',
-    'company_state': '//*[@id="167:_select"]',
-    'company_telephone' : '//*[@id="179:_txtFld"]',
-    'employment_type' : '//*[@id="191:_select"]',
     'type_of_company' : '//*[@id="159:_select"]',
+    'company_country':'//*[@id="163:_select"]',
+    'company_state': '//*[@id="167:_select"]',
+    'company_phone' : '//*[@id="179:_txtFld"]',
+    'employment_type' : '//*[@id="191:_select"]',
     'company_city' : '//*[@id="171:_txtFld"]',
     'position_title' : '//*[@id="183:_txtFld"]',
     'reason_for_leaving' : '//*[@id="195:_select"]',
     'may_we_contact' : '//*[@id="207:_select"]',
-    'company_country':'//*[@id="163:_select"]',
     'company_postal_code':'//*[@id="175:_txtFld"]',
     'position_type':'//*[@id="187:_select"]',
-    'reason_for_leading':'//*[@id="199:_txtFld"]',
+    'reason_for_leaving_descr':'//*[@id="199:_txtFld"]',
     'from_date':'//*[@id="143:_write"]',
     'end_date':'//*[@id="149:_write"]'
 }
 
 XPATHS_EDUCATION = {
-    'education_type' : '//*[@id="532:_select"]',
-    'country': '//*[@id="536:_select"]', 
-    'state': '//*[@id="540:_select"]',
-    'city': '//*[@id="544:_txtFld"]', 
+    'education_type' : '//*[@id="520:_select"]',
+    'country': '//*[@id="524:_select"]', 
+    'state': '//*[@id="528:_select"]',
+    'city': '//*[@id="536:_select"]', 
     'school': '//*[@id="548:_select"]',
-    'degree_status': '//*[@id="556:_select"]',
-    'area_of_study': '//*[@id="560:_select"]'
+    'degree_status': '//*[@id="544:_select"]',
+    'area_of_study': '//*[@id="548:_select"]'
 }
 
 XPATHS_JOB_SPECIFIC ={
@@ -91,19 +91,19 @@ XPATHS_JOB_SPECIFIC ={
     'type_desired': '//*[@id="349:_select"]',
     'best_call_time': '//*[@id="353:_select"]',
     'available_sunday': '//*[@id="361:_select"]',
-    'available_monday': '//*[@id="361:_select"]',
-    'available_tuesday': '//*[@id="361:_select"]',
-    'available_wednesday': '//*[@id="361:_select"]',
-    'available_thursday': '//*[@id="361:_select"]',
-    'available_friday': '//*[@id="361:_select"]',
-    'available_saturday': '//*[@id="361:_select"]',
+    'available_monday': '//*[@id="365:_select"]',
+    'available_tuesday': '//*[@id="369:_select"]',
+    'available_wednesday': '//*[@id="373:_select"]',
+    'available_thursday': '//*[@id="377:_select"]',
+    'available_friday': '//*[@id="381:_select"]',
+    'available_saturday': '//*[@id="385:_select"]',
     'worked_here_before': '//*[@id="393:_txtArea"]',
     'other_work_fits': '//*[@id="397:_txtArea"]',
     'terminated': '//*[@id="401:_select"]',
     'terminated_describe': '//*[@id="405:_txtArea"]',
     'cash_shortages': '//*[@id="409:_select"]',
     'cash_shortages_describe': '//*[@id="413:_txtArea"]',
-    'conviction': '//*[@id="425:_txtFld"]',
+    'conviction_legal_name': '//*[@id="425:_txtFld"]',
     'convicted': '//*[@id="429:_select"]',
     'convicted_describe': '//*[@id="433:_txtArea"]',
     'contact_first_name': '//*[@id="441:_txtFld"]',
@@ -115,18 +115,19 @@ XPATHS_JOB_SPECIFIC ={
     'ethnicity': '//*[@id="493:_select"]',
     'gender_female': '//*[@id="499:_anchorButton"]/span',
     'gender_male': '//*[@id="500:_anchorButton"]',
-    '15_or_older': '//*[@id="218:_anchorButton"]/span',
-    '18_or_older': '//*[@id="224:_anchorButton"]',
-    '12_or_older': '//*[@id="230:_anchorButton"]/span',
-    'legal_verification': '//*[@id="236:_anchorButton"]',
-    'accomodation': '//*[@id="242:_anchorButton"]/span',
+    '15_or_older_yes': '//*[@id="218:_anchorButton"]/span',
+    '18_or_older_yes': '//*[@id="224:_anchorButton"]',
+    '21_or_older_yes': '//*[@id="230:_anchorButton"]/span',
+    'legal_verification_yes': '//*[@id="236:_anchorButton"]',
+    'accomodation_yes': '//*[@id="242:_anchorButton"]/span',
     'overnight_yes': '//*[@id="248:_anchorButton"]/span',
-    'overnight_no': '//*[@id="249:_anchorButton"]'
+    'overnight_no': '//*[@id="249:_anchorButton"]',
+    'apply_button': '//*[@id="510:_submitBtn"]'
 }
 
 MY_DOCUMENTS_DROPDOWN = '//*[@id="51:topBar"]'
-UPLOAD_A_RESUME_BUTTON = '//*[@id="52:_attachLabel"]'
-UPLOAD_FROM_DEVICE_BUTTON = '//*[@id="53:_file"]'
+UPLOAD_A_RESUME_BUTTON = '//*[@id="52:_attachIcon"]'
+UPLOAD_FROM_DEVICE_BUTTON = '//*[@id="53:_attachLabel"]'
 
 PROFILE_INFORMATION_DROPDOWN = '//*[@id="134:topBar"]'
 WORK_HISTORY_DROPDOWN = '//*[@id="136:topBar"]'
