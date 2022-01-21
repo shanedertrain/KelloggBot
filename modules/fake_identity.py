@@ -69,10 +69,18 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
     fake_address_split = fake_address.split('\n')
     street_address = fake_address_split[0]
     address_latter = fake_address_split[1].split(',')
+    try: 
+        state_abbrv = address_latter[1].split(' ')[1]
+    except:
+        state_abbrv = address_latter[0].split(' ')[1]
+    if verbose: print(fake_address_split)
+    if verbose: print(street_address, address_latter)
     city = address_latter[0]
-    state_abbrv = address_latter[1].split(' ')[1]
+    
     state_full = abbrev_to_us_state[state_abbrv]
     zip_code = address_latter[1].split(' ')[2]
+
+    ssn = f"{random.randint(1,999):03d}-{random.randint(1,99):02d}-{random.randint(1,9999):04d}"
 
     university = random.choice(UNIVERSITIES)
     degree = random.choice(DEGREES)
@@ -111,6 +119,7 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
         'degree': degree,
         'grad_year': grad_year,
         'mid_year': mid_year,
+        'ssn': ssn
     }
 
     if generate_resume:
@@ -129,7 +138,7 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
         printf(f"                   graduated in {fake_identity['grad_year']} with mid-year in {fake_identity['mid_year']}")
         printf(f"Phone Number  : {fake_identity['phone']}")
         printf(f"Street Address: {fake_identity['street_address']}")
-        printf(f"Job Title     : {fake_identity['job']}")
+        printf(f"Job Title     : {fake_identity['job_0']}")
         printf(f"eMail         : {fake_identity['email']}")
         printf(f"eMail SID     : {fake_identity['email_sid']}")
         printf(f"Password      : {fake_identity['password']}")
