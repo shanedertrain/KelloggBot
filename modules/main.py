@@ -53,6 +53,7 @@ def start_driver(verbose=False):
 
 
 def main():
+    print(f"debug enabled: {args.debug_enabled}")
     exploiter = str(args.exploiter.lower()) #wrapped in string for linter
 
     try:
@@ -94,6 +95,8 @@ def main():
             os.remove(fake_identity['resume_pdf_filepath'])
     except KeyboardInterrupt:
         printf("Exited via keyboard")
+    except Exception:
+        traceback.print_exc()
 
 
 if __name__ == '__main__':

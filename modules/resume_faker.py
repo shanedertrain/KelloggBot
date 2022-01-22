@@ -87,7 +87,7 @@ def make_resume(fake_identity=None, filename='resume', verbose=False):
             fake_identity[f'job_{idx}'] = fake_job
             fake_identity[f'company_{idx}'] = fake_company
             
-
+    print(f"!!!!!!verbose for pdflatex: {verbose}!!!!!!")
     subprocess.call(
         ['pdflatex','auto_resume.tex'], 
         cwd=PACKAGES_FOLDER, 

@@ -65,17 +65,21 @@ def generate_fake_identity(USING_MAILTM, generate_resume=False,verbose=False):
     fake_password = fake.password()
 
     #get address info
-    fake_address = fake.address()
-    fake_address_split = fake_address.split('\n')
-    street_address = fake_address_split[0]
-    address_latter = fake_address_split[1].split(',')
-    try: 
-        state_abbrv = address_latter[1].split(' ')[1]
-    except:
-        state_abbrv = address_latter[0].split(' ')[1]
-    if verbose: print(fake_address_split)
-    if verbose: print(street_address, address_latter)
-    city = address_latter[0]
+    while True:
+        fake_address = fake.address()
+        fake_address_split = fake_address.split('\n')
+        street_address = fake_address_split[0]
+        address_latter = fake_address_split[1].split(',')
+        try: 
+            state_abbrv = address_latter[1].split(' ')[1]
+        except:
+            state_abbrv = address_latter[0].split(' ')[1]
+        if verbose: print(fake_address_split)
+        if verbose: print(street_address, address_latter)
+        if verbose: print (state_abbrv)
+        if state_abbrv not in ['AP', 'AE']: #some state abbrvs arent usable
+            city = address_latter[0]
+            break
     
     state_full = abbrev_to_us_state[state_abbrv]
     zip_code = address_latter[1].split(' ')[2]
